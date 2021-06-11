@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import reverse
 
 STATUS = (
     ('None','None'),
@@ -20,6 +21,9 @@ class Job(models.Model):
     status = models.CharField(max_length=6, choices=STATUS, default='None')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def get_absolute_url(self):
+        return reverse('jobs:detail', kwargs={'pk':self.pk})
 
     def __str__(self):
         return str(self.title)
