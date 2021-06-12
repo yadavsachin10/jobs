@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{object.title}}
+{% endblock title %}
+
+{% block content %}
+    Title : {{object.title}}
+    <br>
+    Description : {{object.desc}}
+    <br>
+    Location : {{objecct.location}}
+    <br>
+    Salary : {{object.pay_range}}
+    <br>
+    Status : {{object.status}}
+    {% if object.status == "Active" %}
+        <form action="">
+            <input type="submit" value="Apply">
+        </form>
+    {% endif %}
+{% endblock content %}

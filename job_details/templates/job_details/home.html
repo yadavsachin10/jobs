@@ -8,6 +8,7 @@ Home
 <h1>Jobs</h1>
 <br>
 {% for obj in object_list %}
-    <a href="{{obj.get_absolute_url}}">{{obj.title}}<a>
+    <a href="{{obj.get_absolute_url}}">{{obj.title}}</a>
+    <br>
 {% endfor %}
 {% endblock content%}

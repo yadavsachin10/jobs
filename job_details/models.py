@@ -35,6 +35,9 @@ class JobApplication(models.Model):
     graduation_year = models.IntegerField(blank=True)
     job_type = models.CharField(max_length=30, choices=JOB_TYPE, default='Full Time', null=True)
 
+    # def get_absolute_url(self):
+    #     return reverse('jobs:apply', kwargs={'':self.pk})
+
     def __str__(self):
         return f"Application of {self.full_name}"
 

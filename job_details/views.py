@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, FormView
 from rest_framework.response import Response
 from django.http import HttpResponse
 from rest_framework import status
 from .models import Job, JobApplication
 from .serializers import JobSerializer, JobAppSerializer
+from .forms import applyForm
 
 @api_view(['GET','POST'])
 def job_list(request):
@@ -75,6 +76,16 @@ def applied_user_detail(request,pk):
         job.delete()
         return Respose(status=status.HTTP_204_NO_CONTENT)
 
-class jobs(ListView):
+class Jobs(ListView):
     model = Job
     template_name = 'job_details/home.html'
+
+class JobDetail(DetailView):
+    model = Job
+    template_name = 'job_details/detail.html'
+
+class ApplyPage(FormView):
+    template_name = 'job_deatil/apply_page.html'
+    form = applyForm()
+    success_url = 'jobs/'
+    
