@@ -1,12 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.contrib import messages
 from rest_framework.decorators import api_view
-from django.views.generic import ListView, DetailView, FormView
+from django.views.generic import ListView, DetailView 
+from django.views.generic.edit import FormMixin
 from rest_framework.response import Response
 from django.http import HttpResponse
 from rest_framework import status
 from .models import Job, JobApplication
 from .serializers import JobSerializer, JobAppSerializer
-from .forms import applyForm
+from .forms import ApplyForm
 
 @api_view(['GET','POST'])
 def job_list(request):
@@ -74,18 +76,34 @@ def applied_user_detail(request,pk):
         return Response(serializer.errors,status=status.HTTTP_400_BAD_REQUEST)
     elif request.method == "DELETE":
         job.delete()
-        return Respose(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class Jobs(ListView):
     model = Job
     template_name = 'job_details/home.html'
 
-class JobDetail(DetailView):
+class JobDetail(DetailView,FormMixin):
     model = Job
     template_name = 'job_details/detail.html'
+    form_class = ApplyForm
 
-class ApplyPage(FormView):
-    template_name = 'job_deatil/apply_page.html'
-    form = applyForm()
-    success_url = 'jobs/'
-    
+    # def get_context_data(self, **kwargs):
+    #     context = super(JobDetail,self).get_context_data(**kwargs)
+    #     context['form'] = self.get_form()
+    #     return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return redirect('/')
+        
+    def form_valid(self, form):
+        form.save()
+        return HttpResponse('Applied Successfully')
+
+# class ApplyPage(FormView):
+#     form_class = applyForm
+#     success_url = 'jobs/'
+
